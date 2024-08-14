@@ -1,3 +1,5 @@
-fun main(args: Array<String>) {
-    println("Hello World!")
+import notes.App
+
+fun main() {
+    App().start()
 }
