@@ -9,30 +9,17 @@ abstract class Menu {
     protected open var isRoot = false
 
     protected open var menuItems: MutableMap<String, () -> Unit> = mutableMapOf(
-        "Create" to { create() },
-        "Exit" to { stopExecute = true }
+        CREATE_KEY to { create() },
+        EXIT_KEY to { stopExecute = true }
     )
 
     protected abstract fun create()
 
-    protected fun getUserInput(): String {
-        var input = ""
-        try {
-            input = readln()
-            if (input.trim().isEmpty()) {
-                throw IllegalStateException("Значение не может быть пустым. Повторите попытку.")
-            }
-        }
-        catch (cce: CharacterCodingException) {
-            println("Произошла ошибка ввода. Повторите попытку ввода.")
-        }
-        return input
-    }
 
     //Метод для считывания пунктов меню
     protected open fun readNumMenu() {
         try {
-            val input = this.getUserInput()
+            val input = getUserInput()
             val listItem = menuItems.toList()
             when {
                 input.toInt() !in listItem.indices -> println("Такой цифры в меню не существует. Повторите попытку.")
@@ -50,7 +37,7 @@ abstract class Menu {
             menuItems.onEachIndexed { index, entry -> run {
                 when {
                     index == 0 && !isRoot -> println("0. $CREATE_TITLE")
-                    index >= 0 && index < menuItems.size - 1 -> println("$index. ${entry.key}")
+                    index > 0 && index < menuItems.size - 1 -> println("$index. ${entry.key}")
                     index == menuItems.size - 1 -> println("$index. $EXIT_TITLE")
                 }
             } }
@@ -84,6 +71,8 @@ abstract class Menu {
     }
 
     companion object {
+        const val CREATE_KEY = "Create"
+        const val EXIT_KEY = "Exit"
         const val EXIT_TITLE = "Выход"
         const val CREATE_TITLE = "Создать"
     }

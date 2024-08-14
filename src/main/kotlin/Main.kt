@@ -1,5 +1,5 @@
 import notes.App
 
 fun main() {
-    (App()).start()
+    App().start()
 }

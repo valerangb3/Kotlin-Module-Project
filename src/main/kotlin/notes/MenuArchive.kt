@@ -11,14 +11,15 @@ class MenuArchive : Menu() {
             //могуть быть побелы
             val input = getUserInput()
             val menuNotes = MenuNotes()
+            val size = menuItems.size
             //Получем пункт меню "Выход"
-            val exitItem = menuItems.toList()[menuItems.size - 1]
-            menuItems.remove(exitItem.first)
+            val (keyExit, valueExit) = this.menuItems.toList()[size - 1]
+            menuItems.remove(keyExit)
             menuItems[input] = {
                 menuNotes.start(false)
             }
             //Вставляем в конец пункт меню "Выход"
-            menuItems[exitItem.first] = exitItem.second
+            menuItems[keyExit] = valueExit
         } catch (ise: IllegalStateException) {
             println(ise.message)
         }

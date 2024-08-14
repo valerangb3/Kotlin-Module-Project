@@ -1,6 +1,6 @@
 package notes
 
-class MenuNotes : Menu() {
+open class MenuNotes : Menu() {
     override var menuTitle = "Список заметок:"
     override val menuEntity = "Заметка"
     override val menuCreateTitle = "Введите название заметки:"
@@ -25,6 +25,12 @@ class MenuNotes : Menu() {
         readNoteAttr(menuCreateText)
     )
 
+    private fun showRootMenu(textNote: String) {
+        println("Заметка\n")
+        println("$textNote \n")
+        println("0. $EXIT_TITLE")
+    }
+
     override fun create() {
         //Получем созданную заметку
         val noteItem = getNote()
@@ -32,16 +38,17 @@ class MenuNotes : Menu() {
         //Получем пункт меню "Выход"
         val (keyExit, valueExit) = this.menuItems.toList()[size - 1]
         this.menuItems.remove(keyExit)
-        val menuNote = MenuNote()
+        val menuNotes = MenuNotes()
         this.menuItems[noteItem.noteName] = {
-            menuNote.setNotesMenu(
+            menuNotes.setNotesMenu(
                 mutableMapOf(
-                    noteItem.noteText to {  },
-                    "Exit" to { menuNote.stopExecute() }
+                    EXIT_KEY to { menuNotes.stopExecute() }
                 )
             )
-            menuNote.setRoot()
-            menuNote.start(false)
+            while (!menuNotes.stopExecute) {
+                menuNotes.showRootMenu(noteItem.noteText)
+                menuNotes.readNumMenu()
+            }
         }
         this.menuItems[keyExit] = valueExit
     }
